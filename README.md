@@ -1,5 +1,5 @@
 ```markdown
-# Fake store
+## Fake store
 
 Проект, який демонструє роботу з React, TypeScript, TailwindCSS, MUI та Context API для створення інтерфейсу інтернет-магазину.
 
