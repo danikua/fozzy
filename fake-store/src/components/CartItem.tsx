@@ -1,7 +1,5 @@
 import React from 'react';
 import {
-  ListItem,
-  ListItemAvatar,
   Avatar,
   IconButton,
   TextField,
