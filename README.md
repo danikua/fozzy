@@ -23,7 +23,7 @@
 Спочатку клонувати репозиторій на ваш локальний комп'ютер:
 
 ```bash
-git clone https://github.com/danikua/fozzy
+git clone https://github.com/danikua/fozzy.git
 cd fake-store
 ```
 
