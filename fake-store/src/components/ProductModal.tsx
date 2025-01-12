@@ -42,7 +42,6 @@ export const ProductModal: React.FC<ProductModalProps> = ({ open, product, onClo
             />
           </Box>
 
-          {/* Product Details */}
           <Box sx={{ width: { xs: '100%', md: '66%' } }}>
             <Typography variant="h6" color="primary" sx={{ mb: 2 }}>
               ${product.price.toFixed(2)}
@@ -66,7 +65,6 @@ export const ProductModal: React.FC<ProductModalProps> = ({ open, product, onClo
         </Box>
       </DialogContent>
 
-      {/* Modal Actions */}
       <DialogActions>
         <Button onClick={onClose}>Close</Button>
         <Button

@@ -32,7 +32,6 @@ export const CartItem: React.FC<CartItemProps> = ({ item }) => {
         boxShadow: 3,
       }}
     >
-      {/* Product Image and Info */}
       <Grid container spacing={2} alignItems="center">
         <Grid item xs={4} sm={3}>
           <Avatar

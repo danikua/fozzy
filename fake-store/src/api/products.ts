@@ -1,30 +1,27 @@
 import axios from 'axios';
 import { Product } from '../types/types';
 
-// Настраиваем axios
 export const api = axios.create({
   baseURL: 'https://fakestoreapi.com',
   timeout: 20000,
 });
 
-// Универсальная функция для повторных попыток
 const retryRequest = async <T>(fn: () => Promise<T>, retries: number = 6, delay: number = 1000): Promise<T> => {
   for (let attempt = 1; attempt <= retries; attempt++) {
     try {
-      return await fn(); // Выполняем запрос
+      return await fn(); 
     } catch (error) {
       if (attempt === retries) {
         console.error(`Request failed after ${retries} attempts.`);
-        throw error; // Если достигли максимума попыток, выбрасываем ошибку
+        throw error; 
       }
       console.warn(`Attempt ${attempt} failed. Retrying in ${delay}ms...`);
-      await new Promise((resolve) => setTimeout(resolve, delay)); // Ожидаем перед повтором
+      await new Promise((resolve) => setTimeout(resolve, delay)); 
     }
   }
-  throw new Error('Retry logic reached an unexpected state'); // На случай непредвиденных ситуаций
+  throw new Error('Retry logic reached an unexpected state'); 
 };
 
-// API методы
 export const ProductsApi = {
   getProducts: async (): Promise<Product[]> => {
     return retryRequest(async () => {

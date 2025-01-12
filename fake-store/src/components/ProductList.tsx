@@ -29,7 +29,6 @@ export const ProductList: React.FC = () => {
         setProducts(data);
         setFilteredProducts(data);
 
-        // Извлечение уникальных категорий
         const uniqueCategories = Array.from(new Set(data.map((product) => product.category)));
         setCategories(['All', ...uniqueCategories]);
       } catch (error) {
@@ -41,17 +40,14 @@ export const ProductList: React.FC = () => {
     getProducts();
   }, []);
 
-  // Фильтрация по категории и текстовому поиску
   useEffect(() => {
     const filterProducts = () => {
       let filtered = products;
 
-      // Фильтрация по категории
       if (selectedCategory !== 'All') {
         filtered = filtered.filter((product) => product.category === selectedCategory);
       }
 
-      // Фильтрация по поисковому запросу
       if (searchQuery.trim()) {
         filtered = filtered.filter((product) =>
           product.title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -78,7 +74,6 @@ export const ProductList: React.FC = () => {
         Product List
       </Typography>
 
-      {/* Фильтры */}
       <div className="flex gap-4 mb-6">
         <TextField
           select
@@ -101,7 +96,6 @@ export const ProductList: React.FC = () => {
         />
       </div>
 
-      {/* Список продуктов */}
       <Grid container spacing={3}>
         {filteredProducts.map((product) => (
           <Grid item xs={12} sm={6} md={4} key={product.id}>
@@ -116,7 +110,6 @@ export const ProductList: React.FC = () => {
         ))}
       </Grid>
 
-      {/* Модальное окно продукта */}
       <ProductModal
         open={isModalOpen}
         product={selectedProduct}
