@@ -2,6 +2,7 @@ import React from "react";
 import { Drawer, List, Typography, Divider, Button, Box } from "@mui/material";
 import { useCart } from "../context/CartContext";
 import { CartItem } from "./CartItem";
+import { useNavigate } from "react-router-dom";
 
 interface CartProps {
   open: boolean;
@@ -10,6 +11,7 @@ interface CartProps {
 
 export const Cart: React.FC<CartProps> = ({ open, onClose }) => {
   const { state, clearCart } = useCart();
+  const navigate = useNavigate();
 
   return (
     <Drawer
@@ -39,7 +41,10 @@ export const Cart: React.FC<CartProps> = ({ open, onClose }) => {
               variant="contained"
               color="primary"
               fullWidth
-              onClick={onClose}
+              onClick={() => {
+                onClose();
+                navigate("/checkout", { state: { totalAmount: state.total } });
+              }}
             >
               Checkout
             </Button>
