@@ -1,35 +1,37 @@
-import React, { useState } from "react";
+import React from "react";
+import { useForm, Controller } from "react-hook-form";
 import { TextField, Button, Box, Typography, Divider } from "@mui/material";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 
+type FormData = {
+  name: string;
+  email: string;
+  address: string;
+  city: string;
+  zip: string;
+  cardNumber: string;
+  cardExpiration: string;
+  cardCVV: string;
+};
+
 export const OrderForm: React.FC<{ totalAmount: number }> = ({
   totalAmount,
 }) => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    address: "",
-    city: "",
-    zip: "",
-    cardNumber: "",
-    cardExpiration: "",
-    cardCVV: "",
-  });
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>();
+  const [isSubmitted, setIsSubmitted] = React.useState(false);
   const navigate = useNavigate();
   const { clearCart } = useCart();
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = (data: FormData) => {
+    console.log("Order Data:", data);
     setIsSubmitted(true);
+    clearCart();
   };
 
   if (isSubmitted) {
@@ -63,9 +65,7 @@ export const OrderForm: React.FC<{ totalAmount: number }> = ({
           <Button
             variant="contained"
             color="primary"
-            onClick={() => {
-              navigate("/");
-            }}
+            onClick={() => navigate("/")}
           >
             Continue Shopping
           </Button>
@@ -79,7 +79,7 @@ export const OrderForm: React.FC<{ totalAmount: number }> = ({
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(onSubmit)}
     >
       <Box
         sx={{
@@ -102,85 +102,171 @@ export const OrderForm: React.FC<{ totalAmount: number }> = ({
         <Typography variant="h6" color="text.secondary" gutterBottom>
           Shipping Information
         </Typography>
-        <TextField
+
+        <Controller
           name="name"
-          label="Full Name"
-          variant="outlined"
-          fullWidth
-          value={formData.name}
-          onChange={handleChange}
-          required
+          control={control}
+          defaultValue=""
+          rules={{ required: "Full Name is required" }}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Full Name"
+              variant="outlined"
+              fullWidth
+              error={!!errors.name}
+              helperText={errors.name?.message}
+            />
+          )}
         />
-        <TextField
+        <Controller
           name="email"
-          label="Email"
-          type="email"
-          variant="outlined"
-          fullWidth
-          value={formData.email}
-          onChange={handleChange}
-          required
+          control={control}
+          defaultValue=""
+          rules={{
+            required: "Email is required",
+            pattern: {
+              value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+              message: "Enter a valid email address",
+            },
+          }}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Email"
+              variant="outlined"
+              fullWidth
+              error={!!errors.email}
+              helperText={errors.email?.message}
+            />
+          )}
         />
-        <TextField
+        <Controller
           name="address"
-          label="Address"
-          variant="outlined"
-          fullWidth
-          value={formData.address}
-          onChange={handleChange}
-          required
+          control={control}
+          defaultValue=""
+          rules={{ required: "Address is required" }}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Address"
+              variant="outlined"
+              fullWidth
+              error={!!errors.address}
+              helperText={errors.address?.message}
+            />
+          )}
         />
         <Box sx={{ display: "flex", gap: 2 }}>
-          <TextField
+          <Controller
             name="city"
-            label="City"
-            variant="outlined"
-            fullWidth
-            value={formData.city}
-            onChange={handleChange}
-            required
+            control={control}
+            defaultValue=""
+            rules={{ required: "City is required" }}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="City"
+                variant="outlined"
+                fullWidth
+                error={!!errors.city}
+                helperText={errors.city?.message}
+              />
+            )}
           />
-          <TextField
+          <Controller
             name="zip"
-            label="ZIP Code"
-            variant="outlined"
-            fullWidth
-            value={formData.zip}
-            onChange={handleChange}
-            required
+            control={control}
+            defaultValue=""
+            rules={{
+              required: "ZIP Code is required",
+              pattern: {
+                value: /^\d{5}$/,
+                message: "Enter a valid 5-digit ZIP Code",
+              },
+            }}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="ZIP Code"
+                variant="outlined"
+                fullWidth
+                error={!!errors.zip}
+                helperText={errors.zip?.message}
+              />
+            )}
           />
         </Box>
         <Divider sx={{ my: 2 }} />
         <Typography variant="h6" color="text.secondary" gutterBottom>
           Payment Details
         </Typography>
-        <TextField
+        <Controller
           name="cardNumber"
-          label="Card Number"
-          variant="outlined"
-          fullWidth
-          value={formData.cardNumber}
-          onChange={handleChange}
-          required
+          control={control}
+          defaultValue=""
+          rules={{
+            required: "Card Number is required",
+            pattern: {
+              value: /^\d{16}$/,
+              message: "Enter a valid 16-digit card number",
+            },
+          }}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Card Number"
+              variant="outlined"
+              fullWidth
+              error={!!errors.cardNumber}
+              helperText={errors.cardNumber?.message}
+            />
+          )}
         />
         <Box sx={{ display: "flex", gap: 2 }}>
-          <TextField
+          <Controller
             name="cardExpiration"
-            label="Expiration Date (MM/YY)"
-            variant="outlined"
-            fullWidth
-            value={formData.cardExpiration}
-            onChange={handleChange}
-            required
+            control={control}
+            defaultValue=""
+            rules={{
+              required: "Expiration date is required",
+              pattern: {
+                value: /^(0[1-9]|1[0-2])\/\d{2}$/,
+                message: "Enter a valid date (MM/YY)",
+              },
+            }}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Expiration Date (MM/YY)"
+                variant="outlined"
+                fullWidth
+                error={!!errors.cardExpiration}
+                helperText={errors.cardExpiration?.message}
+              />
+            )}
           />
-          <TextField
+          <Controller
             name="cardCVV"
-            label="CVV"
-            variant="outlined"
-            fullWidth
-            value={formData.cardCVV}
-            onChange={handleChange}
-            required
+            control={control}
+            defaultValue=""
+            rules={{
+              required: "CVV is required",
+              pattern: {
+                value: /^\d{3}$/,
+                message: "Enter a valid 3-digit CVV",
+              },
+            }}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="CVV"
+                variant="outlined"
+                fullWidth
+                error={!!errors.cardCVV}
+                helperText={errors.cardCVV?.message}
+              />
+            )}
           />
         </Box>
         <Typography
@@ -190,13 +276,7 @@ export const OrderForm: React.FC<{ totalAmount: number }> = ({
         >
           Total: ${totalAmount.toFixed(2)}
         </Typography>
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          onClick={clearCart}
-        >
+        <Button type="submit" variant="contained" color="primary" fullWidth>
           Place Order
         </Button>
       </Box>
