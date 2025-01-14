@@ -48,7 +48,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ open, product, onClo
             </Typography>
 
             <Box sx={{ mb: 3 }}>
-              <Rating value={product.rating.rate} readOnly precision={0.5} />
+              <Rating value={product.rating.rate} precision={0.5} />
               <Typography variant="body2" color="text.secondary">
                 ({product.rating.count} reviews)
               </Typography>

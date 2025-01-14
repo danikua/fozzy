@@ -1,14 +1,7 @@
-import React from 'react';
-import {
-  Drawer,
-  List,
-  Typography,
-  Divider,
-  Button,
-  Box,
-} from '@mui/material';
-import { useCart } from '../context/CartContext';
-import { CartItem } from './CartItem';
+import React from "react";
+import { Drawer, List, Typography, Divider, Button, Box } from "@mui/material";
+import { useCart } from "../context/CartContext";
+import { CartItem } from "./CartItem";
 
 interface CartProps {
   open: boolean;
@@ -16,7 +9,7 @@ interface CartProps {
 }
 
 export const Cart: React.FC<CartProps> = ({ open, onClose }) => {
-  const { state } = useCart();
+  const { state, clearCart } = useCart();
 
   return (
     <Drawer
@@ -49,6 +42,15 @@ export const Cart: React.FC<CartProps> = ({ open, onClose }) => {
               onClick={onClose}
             >
               Checkout
+            </Button>
+            <Button
+              className="flex-1 border-primary text-primary font-medium py-2 px-4 mt-4"
+              variant="outlined"
+              color="primary"
+              fullWidth
+              onClick={() => clearCart()}
+            >
+              Clear
             </Button>
           </>
         )}
